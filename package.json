@@ -2,7 +2,7 @@
   "name": "nuxt-crash-course",
   "version": "1.0.0",
   "description": "My gnarly Nuxt.js project",
-  "author": "Vladilen",
+  "author": "Sergei",
   "private": true,
   "scripts": {
     "dev": "nuxt",
