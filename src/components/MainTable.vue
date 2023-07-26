@@ -1,64 +1,65 @@
 <template>
   <v-container>
     <div v-for="(item, key) in data" :key="key">
-      <v-card class="mb-3">
-        <v-card-title>
-          <div class="headline">{{ item.type }}</div>
-        </v-card-title>
-        <v-card-text>
-          <v-simple-table>
-            <template v-slot:default>
-              <thead>
-                <tr>
-                  <th class="text-left">Дата</th>
-                  <th class="text-left">День недели</th>
-                  <th class="text-left">Начало</th>
-                  <th class="text-left">Окончание</th>
-                  <th class="text-left">Всего</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>{{ item.date }}</td>
-                  <td>{{ item.day_of_week }}</td>
-                  <td>{{ item.start_time }}</td>
-                  <td>{{ item.end_time }}</td>
-                  <td>
-                    {{ calculateTotalTime(item.start_time, item.end_time) }}
-                  </td>
-                </tr>
-              </tbody>
-            </template>
-          </v-simple-table>
-
-          <v-divider class="my-3"></v-divider>
-
-          <v-simple-table dense>
-            <template v-slot:default>
-              <thead>
-                <tr>
-                  <th class="text-left">Упражнения</th>
-                  <th class="text-left">Подход 1</th>
-                  <th class="text-left">Подход 2</th>
-                  <th class="text-left">Подход 3</th>
-                  <th class="text-left">Подход 4</th>
-                  <th class="text-left">Подход 5</th>
-                </tr>
-              </thead>
-
-              <tbody v-for="exercise in item.exercises" :key="exercise.name">
-                <tr :key="exercise.name">
-                  <td colspan="6">
-                    {{ exercise.name }}
-                    {{ exercise.description }}
-                  </td>
-                </tr>
-                <tr :key="exercise.name + '-sets'"></tr>
-              </tbody>
-            </template>
-          </v-simple-table>
-        </v-card-text>
-      </v-card>
+      <v-table>
+        <thead>
+          <tr>
+            <th class="text-left">Номер</th>
+            <th class="text-left">Дата</th>
+            <th class="text-left">День недели</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, key) in data" :key="key">
+            <td>{{ key }}</td>
+            <td>{{ item.date }}</td>
+            <td>{{ item.day_of_week }}</td>
+          </tr>
+        </tbody>
+      </v-table>
+      <h2>{{ item.type }}</h2>
+      <v-table>
+        <thead>
+          <tr>
+            <th class="text-left">Начало</th>
+            <th class="text-left">Окончание</th>
+            <th class="text-left">Всего</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, key) in data" :key="key">
+            <td>{{ item.start_time }}</td>
+            <td>{{ item.end_time }}</td>
+            <td>{{ calculateTotalTime(item.start_time, item.end_time) }}</td>
+          </tr>
+        </tbody>
+      </v-table>
+      <br />
+      <v-table>
+        <thead>
+          <tr>
+            <th class="text-left">Упражнения</th>
+            <th class="text-left">Подход 1</th>
+            <th class="text-left">Подход 2</th>
+            <th class="text-left">Подход 3</th>
+            <th class="text-left">Подход 4</th>
+            <th class="text-left">Подход 5</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="exercise in item.exercises" :key="exercise.name">
+            <td>
+              <p>{{ exercise.name }}</p>
+              <p class="gray">{{ exercise.description }}</p>
+            </td>
+            <td v-for="set in exercise.sets" :key="set.weight">
+              {{ set.weight }}
+              <a class="gray">кг</a>
+              x {{ set.reps }}
+            </td>
+          </tr>
+        </tbody>
+      </v-table>
     </div>
   </v-container>
 </template>
