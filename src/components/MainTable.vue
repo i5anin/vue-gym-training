@@ -7,20 +7,6 @@
             <th class="text-left">Номер</th>
             <th class="text-left">Дата</th>
             <th class="text-left">День недели</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(item, key) in data" :key="key">
-            <td>{{ key }}</td>
-            <td>{{ item.date }}</td>
-            <td>{{ item.day_of_week }}</td>
-          </tr>
-        </tbody>
-      </v-table>
-      <h2>{{ item.type }}</h2>
-      <v-table>
-        <thead>
-          <tr>
             <th class="text-left">Начало</th>
             <th class="text-left">Окончание</th>
             <th class="text-left">Всего</th>
@@ -28,12 +14,16 @@
         </thead>
         <tbody>
           <tr v-for="(item, key) in data" :key="key">
+            <td>{{ key }}</td>
+            <td>{{ item.date }}</td>
+            <td>{{ item.day_of_week }}</td>
             <td>{{ item.start_time }}</td>
             <td>{{ item.end_time }}</td>
             <td>{{ calculateTotalTime(item.start_time, item.end_time) }}</td>
           </tr>
         </tbody>
       </v-table>
+      <h2>{{ item.type }}</h2>
       <br />
       <v-table>
         <thead>
@@ -52,10 +42,12 @@
               <p>{{ exercise.name }}</p>
               <p class="gray">{{ exercise.description }}</p>
             </td>
-            <td v-for="set in exercise.sets" :key="set.weight">
-              {{ set.weight }}
-              <a class="gray">кг</a>
-              x {{ set.reps }}
+            <td v-for="i in 5" :key="i">
+              <template v-if="exercise.sets[i - 1]">
+                {{ exercise.sets[i - 1].weight }}
+                <a class="gray">кг</a>
+                x {{ exercise.sets[i - 1].reps }}
+              </template>
             </td>
           </tr>
         </tbody>
