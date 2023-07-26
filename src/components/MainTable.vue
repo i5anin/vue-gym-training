@@ -43,13 +43,27 @@
               <p>{{ index + 1 }}. {{ exercise.name }}</p>
               <p class="gray">{{ exercise.description }}</p>
             </td>
-            <td v-for="i in 5" :key="i">
-              <template v-if="exercise.sets[i - 1]">
-                {{ exercise.sets[i - 1].weight }}
-                <span class="gray">кг</span>
-                x {{ exercise.sets[i - 1].reps }}
-                <div class="gray">{{ exercise.sets[i - 1].note }}</div>
-              </template>
+            <td>
+              <v-edit-dialog
+                :return-value.sync="exercise.sets[0].weight"
+                @save="save"
+                @cancel="cancel"
+                @open="open"
+                @close="close"
+              >
+                {{ exercise.sets[0].weight }}
+                <span class="gray">кг</span> x {{ exercise.sets[0].reps }}
+                <template #input>
+                  <div class="mt-2">
+                    <v-text-field
+                      v-model="exercise.sets[0].weight"
+                      label="Weight"
+                      single-line
+                      counter
+                    ></v-text-field>
+                  </div>
+                </template>
+              </v-edit-dialog>
             </td>
           </tr>
         </tbody>
@@ -62,11 +76,29 @@
 
 <script>
 import data from '@/data/data.json'
+import Vue from 'vue'
+import { createVuetify, VTable, VEditDialog } from 'vuetify'
+
+Vue.use(Vuetify, {
+  components: {
+    VTable,
+    VEditDialog,
+  },
+})
 
 export default {
   data() {
     return {
       data,
+      valid: true,
+      newExercise: {
+        name: '',
+        description: '',
+        sets: [],
+      },
+      rules: {
+        required: (value) => !!value || 'Required.',
+      },
     }
   },
   methods: {
@@ -79,6 +111,16 @@ export default {
         (diff - hours * (1000 * 60 * 60)) / (1000 * 60)
       )
       return `${hours}:${minutes.toString().padStart(2, '0')}`
+    },
+    addExercise() {
+      if (this.$refs.form.validate()) {
+        this.item.exercises.push(this.newExercise)
+        this.newExercise = {
+          name: '',
+          description: '',
+          sets: [],
+        }
+      }
     },
   },
 }
