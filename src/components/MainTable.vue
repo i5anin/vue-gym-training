@@ -1,6 +1,8 @@
 <template>
   <v-container>
     <div v-for="(item, key) in data" :key="key">
+      <h2>{{ item.type }}</h2>
+      <br />
       <v-table>
         <thead>
           <tr>
@@ -13,7 +15,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, key) in data" :key="key">
+          <tr>
             <td>{{ key }}</td>
             <td>{{ item.date }}</td>
             <td>{{ item.day_of_week }}</td>
@@ -23,7 +25,6 @@
           </tr>
         </tbody>
       </v-table>
-      <h2>{{ item.type }}</h2>
       <br />
       <v-table>
         <thead>
@@ -37,21 +38,24 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="exercise in item.exercises" :key="exercise.name">
+          <tr v-for="(exercise, index) in item.exercises" :key="exercise.name">
             <td>
-              <p>{{ exercise.name }}</p>
+              <p>{{ index + 1 }}. {{ exercise.name }}</p>
               <p class="gray">{{ exercise.description }}</p>
             </td>
             <td v-for="i in 5" :key="i">
               <template v-if="exercise.sets[i - 1]">
                 {{ exercise.sets[i - 1].weight }}
-                <a class="gray">кг</a>
+                <span class="gray">кг</span>
                 x {{ exercise.sets[i - 1].reps }}
+                <div class="gray">{{ exercise.sets[i - 1].note }}</div>
               </template>
             </td>
           </tr>
         </tbody>
       </v-table>
+      <br />
+      <br />
     </div>
   </v-container>
 </template>
