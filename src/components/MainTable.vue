@@ -2,21 +2,7 @@
   <v-container>
     <div v-for="(item, key) in data" :key="key">
       <h2>{{ item.type }}</h2>
-      <img
-        v-if="hasType(item.type, 'плечи')"
-        :src="plechiImage"
-        style="height: 100px"
-      />
-      <img
-        v-if="hasType(item.type, 'спина')"
-        :src="backImage"
-        style="height: 100px"
-      />
-      <img
-        v-if="hasType(item.type, 'грудь')"
-        :src="chestImage"
-        style="height: 100px"
-      />
+      <img :src="getImageForType(item.type)" style="height: 100px" />
       <br />
       <v-table>
         <thead>
@@ -103,6 +89,20 @@ export default {
     },
     hasType(itemType, type) {
       return itemType && itemType.toLowerCase().includes(type)
+    },
+    getImageForType(type) {
+      const imageMap = {
+        плечи: plechiImage,
+        грудь: chestImage,
+        спина: backImage,
+      }
+      return this.hasType(type, 'плечи')
+        ? imageMap['плечи']
+        : this.hasType(type, 'грудь')
+        ? imageMap['грудь']
+        : this.hasType(type, 'спина')
+        ? imageMap['спина']
+        : ''
     },
   },
 }
