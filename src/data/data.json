@@ -1,10 +1,7 @@
 {
   "19": {
-    "date": "03.08.2022",
-    "day_of_week": "СР",
-    "start_time": "20:40",
-    "end_time": "21:05",
-    "total_time": null,
+    "start_time": "2022-08-03T20:40:00",
+    "end_time": "2022-08-03T21:05:00",
     "type": "Плечи и пресс",
     "exercises": [
       {
@@ -72,7 +69,6 @@
     "day_of_week": "ВТ",
     "start_time": "18:30",
     "end_time": "19:34",
-    "total_time": null,
     "type": "Спина и руки(бицепс)",
     "exercises": [
       {
@@ -141,7 +137,6 @@
     "day_of_week": "ВТ",
     "start_time": "18:30",
     "end_time": "19:34",
-    "total_time": null,
     "type": "Грудь и руки(трицепс)",
     "exercises": [
       {
