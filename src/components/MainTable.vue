@@ -3,17 +3,17 @@
     <div v-for="(item, key) in data" :key="key">
       <h2>{{ item.type }}</h2>
       <img
-        v-if="item.type && item.type.toLowerCase().includes('плечи')"
+        v-if="hasType(item.type, 'плечи')"
         :src="plechiImage"
         style="height: 100px"
       />
       <img
-        v-if="item.type && item.type.toLowerCase().includes('спина')"
+        v-if="hasType(item.type, 'спина')"
         :src="backImage"
         style="height: 100px"
       />
       <img
-        v-if="item.type && item.type.toLowerCase().includes('грудь')"
+        v-if="hasType(item.type, 'грудь')"
         :src="chestImage"
         style="height: 100px"
       />
@@ -100,6 +100,9 @@ export default {
         (diff - hours * (1000 * 60 * 60)) / (1000 * 60)
       )
       return `${hours}:${minutes.toString().padStart(2, '0')}`
+    },
+    hasType(itemType, type) {
+      return itemType && itemType.toLowerCase().includes(type)
     },
   },
 }
