@@ -71,9 +71,6 @@ export default {
   data() {
     return {
       data,
-      plechiImage,
-      chestImage,
-      backImage,
     }
   },
   methods: {
