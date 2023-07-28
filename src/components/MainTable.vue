@@ -84,9 +84,6 @@ export default {
       )
       return `${hours}:${minutes.toString().padStart(2, '0')}`
     },
-    hasType(itemType, type) {
-      return itemType && itemType.toLowerCase().includes(type)
-    },
     getImageForType(type) {
       const imageMap = {
         плечи: plechiImage,
@@ -100,6 +97,9 @@ export default {
         : this.hasType(type, 'спина')
         ? imageMap['спина']
         : ''
+    },
+    hasType(itemType, type) {
+      return itemType && itemType.toLowerCase().includes(type)
     },
   },
 }
