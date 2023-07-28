@@ -1,4 +1,72 @@
 {
+  "19": {
+    "date": "03.08.2022",
+    "day_of_week": "СР",
+    "start_time": "20:40",
+    "end_time": "21:05",
+    "total_time": null,
+    "type": "Плечи и пресс",
+    "exercises": [
+      {
+        "name": "Жим в смите перед собой",
+        "sets": [
+          { "weight": 10, "reps": 20 },
+          { "weight": 20, "reps": 15, "note": "тяжело" },
+          { "weight": 25, "reps": 12 },
+          { "weight": 25, "reps": 12 }
+        ]
+      },
+      {
+        "name": "Подъем каната в кроссовере перед собой",
+        "sets": [
+          { "weight": 4.5, "reps": 20 },
+          { "weight": 4.5, "reps": 20 },
+          { "weight": 4.5, "reps": 20 }
+        ]
+      },
+      {
+        "name": "Отведение гантелей в стороны",
+        "sets": [
+          { "weight": 15, "reps": 15 },
+          { "weight": 20, "reps": 15 },
+          { "weight": 23, "reps": 15 },
+          { "weight": 25, "reps": 15 }
+        ]
+      },
+      {
+        "name": "Отведение гантелей сидя",
+        "description": "в наклоне на скамье в стороны",
+        "sets": [
+          { "weight": 2, "reps": 20 },
+          { "weight": 2, "reps": 20 },
+          { "weight": 3, "reps": 20 },
+          { "weight": 3, "reps": 20 }
+        ]
+      },
+      {
+        "name": "Подъем прямых ног в тренажере Профлайн",
+        "description": "Локти ближе к себе",
+        "sets": [
+          { "weight": 0, "reps": 15 },
+          { "weight": 0, "reps": 15 },
+          { "weight": 0, "reps": 15 },
+          { "weight": 0, "reps": 15 },
+          { "weight": 0, "reps": 15 }
+        ]
+      },
+      {
+        "name": "Скручивание на полу",
+        "description": "Пресс",
+        "sets": [
+          { "weight": 0, "reps": 30 },
+          { "weight": 0, "reps": 30 },
+          { "weight": 0, "reps": 30 },
+          { "weight": 0, "reps": 30 },
+          { "weight": 0, "reps": 30 }
+        ]
+      }
+    ]
+  },
   "01": {
     "date": "25.07.2023",
     "day_of_week": "ВТ",

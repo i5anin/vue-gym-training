@@ -2,6 +2,21 @@
   <v-container>
     <div v-for="(item, key) in data" :key="key">
       <h2>{{ item.type }}</h2>
+      <img
+        v-if="item.type && item.type.toLowerCase().includes('плечи')"
+        :src="plechiImage"
+        style="height: 100px"
+      />
+      <img
+        v-if="item.type && item.type.toLowerCase().includes('спина')"
+        :src="backImage"
+        style="height: 100px"
+      />
+      <img
+        v-if="item.type && item.type.toLowerCase().includes('грудь')"
+        :src="chestImage"
+        style="height: 100px"
+      />
       <br />
       <v-table>
         <thead>
@@ -61,12 +76,18 @@
 </template>
 
 <script>
+import plechiImage from '@/assets/plechiImage.jpeg'
+import chestImage from '@/assets/chestImage.jpeg'
+import backImage from '@/assets/backImage.jpg'
 import data from '@/data/data.json'
 
 export default {
   data() {
     return {
       data,
+      plechiImage,
+      chestImage,
+      backImage,
     }
   },
   methods: {
