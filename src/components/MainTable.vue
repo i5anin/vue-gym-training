@@ -17,7 +17,13 @@
         </thead>
         <tbody>
           <tr>
-            <td>{{ key }}</td>
+            <td>
+
+              {{ key }
+
+            </td>
+
+
             <td>{{ item.date }}</td>
             <td>{{ item.day_of_week }}</td>
             <td>{{ item.start_time }}</td>
@@ -47,7 +53,7 @@
             <td v-for="i in 5" :key="i">
               <template v-if="exercise.sets[i - 1]">
                 {{ exercise.sets[i - 1].weight }}
-                <span class="gray">кг</span>
+                <!-- <span class="gray">кг</span> -->
                 x {{ exercise.sets[i - 1].reps }}
                 <div class="gray">{{ exercise.sets[i - 1].note }}</div>
               </template>
@@ -62,9 +68,10 @@
 </template>
 
 <script>
-import plechiImage from '@/assets/plechiImage.jpeg'
+import shouldersImage from '@/assets/shouldersImage.jpeg'
 import chestImage from '@/assets/chestImage.jpeg'
 import backImage from '@/assets/backImage.jpg'
+
 import data from '@/data/data.json'
 
 export default {
@@ -86,7 +93,7 @@ export default {
     },
     getImageForType(type) {
       const imageMap = {
-        плечи: plechiImage,
+        плечи: shouldersImage,
         грудь: chestImage,
         спина: backImage,
       }
