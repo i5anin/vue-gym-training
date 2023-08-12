@@ -1,12 +1,18 @@
 <template>
   <v-container>
-    <template slot="activator" slot-scope="{ props }">
-      <v-btn color="primary" v-bind="props"> Open Dialog </v-btn>
-    </template>
+    <!--    <template slot="activator" slot-scope="{ props }">-->
+    <!--      <v-btn color="primary" v-bind="props"> Open Dialog </v-btn>-->
+    <!--    </template>-->
     <div v-for="(item, key) in trainings" :key="key">
-      <h2>{{ item.type }}</h2>
-      <img :src="getImageForType(item.type)" style="height: 100px" alt="img" />
-      <br />
+      <div class="flex">
+        <img
+          :src="getImageForType(item.type)"
+          style="height: 100px"
+          alt="img"
+        />
+
+        <h2>{{ item.type }}</h2>
+      </div>
       <v-table>
         <thead>
           <tr>
@@ -72,7 +78,7 @@ import shouldersImg from '@/assets/shouldersImg.jpg'
 import chestImg from '@/assets/chestImg.jpg'
 import backImg from '@/assets/backImg.jpg'
 // Modal
-import Modal from '@/components/Modal.vue'
+// import Modal from '@/components/Modal.vue'
 // moment
 import moment from 'moment'
 import 'moment/locale/ru'
@@ -87,9 +93,9 @@ export default {
       exercises: null,
     }
   },
-  components: {
-    Modal,
-  },
+  // components: {
+  //   Modal,
+  // },
   methods: {
     formatDate(date) {
       return moment(date).format('DD.MM.YYYY')
@@ -128,9 +134,6 @@ export default {
       return itemType && itemType.toLowerCase().includes(type)
     },
   },
-  // created() {
-  //   moment.locale('ru')
-  // },
 }
 </script>
 
@@ -138,5 +141,8 @@ export default {
 .gray {
   color: gray;
   font-size: 14px;
+}
+.flex {
+  display: flex;
 }
 </style>
