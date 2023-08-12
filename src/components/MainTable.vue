@@ -53,7 +53,6 @@
                 {{ exercise.sets[i - 1].weight }}&nbsp;x&nbsp;{{
                   exercise.sets[i - 1].reps
                 }}
-                <!-- <span class="gray">кг</span>-->
                 <div class="gray">{{ exercise.sets[i - 1].note }}</div>
               </template>
             </td>
