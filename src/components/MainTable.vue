@@ -2,7 +2,7 @@
   <v-container>
     <div v-for="(item, key) in data" :key="key">
       <h2>{{ item.type }}</h2>
-      <img :src="getImageForType(item.type)" style="height: 100px" />
+      <img :src="getImageForType(item.type)" style="height: 100px"  alt="img"/>
       <br />
       <v-table>
         <thead>
@@ -18,11 +18,11 @@
         <tbody>
           <tr>
             <td>{{ key }}</td>
-            <td>{{ item.date }}</td>
-            <td>{{ item.day_of_week }}</td>
-            <td>{{ item.start_time }}</td>
-            <td>{{ item.end_time }}</td>
-            <td>{{ calculateTotalTime(item.start_time, item.end_time) }}</td>
+            <td>{{ formatDate(item.startTime) }}</td>
+            <td>{{ formatDayOfWeek(item.startTime) }}</td>
+            <td>{{ formatTime(item.startTime) }}</td>
+            <td>{{ formatTime(item.endTime) }}</td>
+            <td>{{ calculateTotalTime(item.startTime, item.endTime) }}</td>
           </tr>
         </tbody>
       </v-table>
@@ -47,7 +47,7 @@
             <td v-for="i in 5" :key="i">
               <template v-if="exercise.sets[i - 1]">
                 {{ exercise.sets[i - 1].weight }}
-                <span class="gray">кг</span>
+<!--                <span class="gray">кг</span>-->
                 x {{ exercise.sets[i - 1].reps }}
                 <div class="gray">{{ exercise.sets[i - 1].note }}</div>
               </template>
@@ -62,10 +62,13 @@
 </template>
 
 <script>
-import plechiImage from '@/assets/plechiImage.jpeg'
+import shouldersImage from '@/assets/shouldersImage.jpeg'
 import chestImage from '@/assets/chestImage.jpeg'
 import backImage from '@/assets/backImage.jpg'
 import data from '@/data/data.json'
+import moment from 'moment'
+import 'moment/locale/ru'
+
 
 export default {
   data() {
@@ -74,19 +77,22 @@ export default {
     }
   },
   methods: {
-    calculateTotalTime(startTime, endTime) {
-      const start = new Date(`1970/01/01 ${startTime}`)
-      const end = new Date(`1970/01/01 ${endTime}`)
-      const diff = end - start
-      const hours = Math.floor(diff / (1000 * 60 * 60))
-      const minutes = Math.floor(
-        (diff - hours * (1000 * 60 * 60)) / (1000 * 60)
-      )
-      return `${hours}:${minutes.toString().padStart(2, '0')}`
+    formatDate(date) {
+      return moment(date).format('DD.MM.YYYY')
     },
+    formatDayOfWeek(date) {
+      return moment(date).format('dd')
+    },
+    formatTime(date) {
+      return moment(date).format('HH:mm')
+    },
+    calculateTotalTime(startTime, endTime) {
+      console.log(`startTime: ${startTime}, endTime: ${endTime}`)
+    }
+,
     getImageForType(type) {
       const imageMap = {
-        плечи: plechiImage,
+        плечи: shouldersImage,
         грудь: chestImage,
         спина: backImage,
       }
@@ -102,6 +108,9 @@ export default {
       return itemType && itemType.toLowerCase().includes(type)
     },
   },
+  // created() {
+  //   moment.locale('ru')
+  // },
 }
 </script>
 
