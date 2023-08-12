@@ -1,8 +1,8 @@
 <template>
   <v-container>
-    <div v-for="(item, key) in data" :key="key">
+    <div v-for="(item, key) in trainings" :key="key">
       <h2>{{ item.type }}</h2>
-      <img :src="getImageForType(item.type)" style="height: 100px"  alt="img"/>
+      <img :src="getImageForType(item.type)" style="height: 100px" alt="img" />
       <br />
       <v-table>
         <thead>
@@ -31,11 +31,11 @@
         <thead>
           <tr>
             <th class="text-left">Упражнения</th>
-            <th class="text-left">Подход 1</th>
-            <th class="text-left">Подход 2</th>
-            <th class="text-left">Подход 3</th>
-            <th class="text-left">Подход 4</th>
-            <th class="text-left">Подход 5</th>
+            <th class="text-left">Подход&nbsp;1</th>
+            <th class="text-left">Подход&nbsp;2</th>
+            <th class="text-left">Подход&nbsp;3</th>
+            <th class="text-left">Подход&nbsp;4</th>
+            <th class="text-left">Подход&nbsp;5</th>
           </tr>
         </thead>
         <tbody>
@@ -46,9 +46,10 @@
             </td>
             <td v-for="i in 5" :key="i">
               <template v-if="exercise.sets[i - 1]">
-                {{ exercise.sets[i - 1].weight }}
-<!--                <span class="gray">кг</span>-->
-                x {{ exercise.sets[i - 1].reps }}
+                {{ exercise.sets[i - 1].weight }}&nbsp;x&nbsp;{{
+                  exercise.sets[i - 1].reps
+                }}
+                <!-- <span class="gray">кг</span>-->
                 <div class="gray">{{ exercise.sets[i - 1].note }}</div>
               </template>
             </td>
@@ -65,15 +66,17 @@
 import shouldersImage from '@/assets/shouldersImage.jpeg'
 import chestImage from '@/assets/chestImage.jpeg'
 import backImage from '@/assets/backImage.jpg'
-import data from '@/data/data.json'
+import trainings from '@/data/trainings.json'
 import moment from 'moment'
 import 'moment/locale/ru'
-
 
 export default {
   data() {
     return {
-      data,
+      trainings,
+      reps: null,
+      note: null,
+      exercises: null,
     }
   },
   methods: {
@@ -87,10 +90,17 @@ export default {
       return moment(date).format('HH:mm')
     },
     calculateTotalTime(startTime, endTime) {
-      console.log(`startTime: ${startTime}, endTime: ${endTime}`)
-    }
-,
+      const startMoment = moment(startTime)
+      const endMoment = moment(endTime)
+      const duration = moment.duration(endMoment.diff(startMoment))
+      return (
+        `${Math.floor(duration.asHours())} ч` +
+        ` ${Math.floor(duration.asMinutes() % 60)} мин`
+      )
+    },
+
     getImageForType(type) {
+      /* eslint-disable-next-line non-ascii */
       const imageMap = {
         плечи: shouldersImage,
         грудь: chestImage,
@@ -117,6 +127,6 @@ export default {
 <style scoped>
 .gray {
   color: gray;
-  font-size: 10px;
+  font-size: 14px;
 }
 </style>
