@@ -8,4 +8,11 @@
 
 <script setup>
 import MainTable from '@/components/MainTable.vue'
+import '@fontsource/nunito'
 </script>
+
+<style>
+body {
+  font-family: 'Nunito', sans-serif;
+}
+</style>
