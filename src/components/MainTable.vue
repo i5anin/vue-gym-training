@@ -1,5 +1,8 @@
 <template>
   <v-container>
+    <template slot="activator" slot-scope="{ props }">
+      <v-btn color="primary" v-bind="props"> Open Dialog </v-btn>
+    </template>
     <div v-for="(item, key) in trainings" :key="key">
       <h2>{{ item.type }}</h2>
       <img :src="getImageForType(item.type)" style="height: 100px" alt="img" />
@@ -63,12 +66,17 @@
 </template>
 
 <script>
-import shouldersImage from '@/assets/shouldersImage.jpeg'
-import chestImage from '@/assets/chestImage.jpeg'
-import backImage from '@/assets/backImage.jpg'
 import trainings from '@/data/trainings.json'
+// Image
+import shouldersImg from '@/assets/shouldersImg.jpg'
+import chestImg from '@/assets/chestImg.jpg'
+import backImg from '@/assets/backImg.jpg'
+// Modal
+import Modal from '@/components/Modal.vue'
+// moment
 import moment from 'moment'
 import 'moment/locale/ru'
+moment.locale('ru')
 
 export default {
   data() {
@@ -79,12 +87,15 @@ export default {
       exercises: null,
     }
   },
+  components: {
+    Modal,
+  },
   methods: {
     formatDate(date) {
       return moment(date).format('DD.MM.YYYY')
     },
     formatDayOfWeek(date) {
-      return moment(date).format('dd')
+      return moment(date).format('dddd')
     },
     formatTime(date) {
       return moment(date).format('HH:mm')
@@ -100,11 +111,10 @@ export default {
     },
 
     getImageForType(type) {
-      /* eslint-disable-next-line non-ascii */
       const imageMap = {
-        плечи: shouldersImage,
-        грудь: chestImage,
-        спина: backImage,
+        плечи: shouldersImg,
+        грудь: chestImg,
+        спина: backImg,
       }
       return this.hasType(type, 'плечи')
         ? imageMap['плечи']
