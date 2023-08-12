@@ -112,16 +112,17 @@ export default {
 
     getImageForType(type) {
       const imageMap = {
-        плечи: shouldersImg,
-        грудь: chestImg,
-        спина: backImg,
+        shoulders: shouldersImg,
+        chest: chestImg,
+        back: backImg,
       }
+
       return this.hasType(type, 'плечи')
-        ? imageMap['плечи']
+        ? imageMap.shoulders
         : this.hasType(type, 'грудь')
-        ? imageMap['грудь']
+        ? imageMap.chest
         : this.hasType(type, 'спина')
-        ? imageMap['спина']
+        ? imageMap.back
         : ''
     },
     hasType(itemType, type) {
