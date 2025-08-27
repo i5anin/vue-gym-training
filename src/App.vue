@@ -1,18 +1,14 @@
 <template>
-  <v-app>
-    <v-main>
-      <MainTable />
-    </v-main>
-  </v-app>
+  <div data-bs-theme="dark" class="bg-dark text-light">
+    <Header />
+    <Menu />
+    <div class="container-fluid">
+      <router-view />
+    </div>
+  </div>
 </template>
 
 <script setup>
-import MainTable from '@/components/MainTable.vue'
-import '@fontsource/nunito'
+import Header from '@/modules/_main/components/Header.vue'
+import Menu from '@/modules/_main/components/Menu.vue'
 </script>
-
-<style>
-body {
-  font-family: 'Nunito', sans-serif;
-}
-</style>

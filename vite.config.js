@@ -1,38 +1,19 @@
-// Plugins
-import vue from '@vitejs/plugin-vue'
-import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
-
-// Utilities
 import { defineConfig } from 'vite'
-import { fileURLToPath, URL } from 'node:url'
+import vue from '@vitejs/plugin-vue'
+import vueDevTools from 'vite-plugin-vue-devtools'
+import { createHtmlPlugin } from 'vite-plugin-html'
+import path from 'path' // Импортируем модуль path
 
-// https://vitejs.dev/config/
 export default defineConfig({
+  server: { host: true, port: 5173 },
   plugins: [
-    vue({ 
-      template: { transformAssetUrls }
-    }),
-    // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vite-plugin
-    vuetify({
-      autoImport: true,
-    }),
+    vue(),
+    vueDevTools(), // Добавляем плагин Vue DevTools
+    createHtmlPlugin({}), // Добавляем плагин HTML
   ],
-  define: { 'process.env': {} },
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': path.resolve(__dirname, './src'), // Указываем путь к папке src
     },
-    extensions: [
-      '.js',
-      '.json',
-      '.jsx',
-      '.mjs',
-      '.ts',
-      '.tsx',
-      '.vue',
-    ],
-  },
-  server: {
-    port: 3000,
   },
 })
