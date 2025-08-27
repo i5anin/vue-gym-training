@@ -1,3 +1,4 @@
+// src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/entities/auth/authStore'
 
@@ -12,8 +13,8 @@ const authRoutes = [
     path: '/logout',
     name: 'Logout',
     beforeEnter: (to, from, next) => {
-      const authStore = useAuthStore() // ✅ Используем store
-      authStore.logout() // ✅ Вызываем метод logout()
+      const authStore = useAuthStore()
+      authStore.logout()
       next('/login')
     },
     meta: { public: true },
@@ -85,7 +86,10 @@ const clientsRoutes = [
     name: 'NomDetails',
     component: () => import('@/pages/form-3/PagesDetailNom.vue'),
     meta: { title: 'Детали номенклатуры клиента' },
-    props: route => ({ ...route.params, type: 'nom' }),
+    props: route => ({
+      ...route.params,
+      type: 'nom',
+    }),
   },
 ]
 
@@ -141,7 +145,10 @@ const specificationsRoutes = [
     name: 'SpecNomDetails',
     component: () => import('@/pages/form-3/PagesDetailNom.vue'),
     meta: { title: 'Детали позиции спецификации' },
-    props: route => ({ ...route.params, type: 'specs' }),
+    props: route => ({
+      ...route.params,
+      type: 'specs',
+    }),
   },
 ]
 
@@ -149,8 +156,7 @@ const devRoutes = [
   {
     path: '/dev/modal-tools/:no/:nomId',
     name: 'ModalTools',
-    component: () =>
-      import('@/modules/modal-tools/components/PagesModalTools.vue'),
+    component: () => import('@/modules/modal-tools/components/PagesModalTools.vue'),
     meta: { title: 'Инструменты модальных окон' },
     props: true,
   },
@@ -191,15 +197,15 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const authStore = useAuthStore()
-  const isAuthenticated = authStore.isAuthenticated
   const defaultTitle = 'Сервисный'
+  document.title = to.meta.title ?? defaultTitle
 
-  document.title = to.meta.title || defaultTitle
-
-  if (!to.meta.public && !isAuthenticated) {
-    return next('/login')
-  }
+  // Авторизация отключена:
+  // const authStore = useAuthStore()
+  // const isAuthenticated = authStore.isAuthenticated
+  // if (!to.meta.public && !isAuthenticated) {
+  //   return next('/login')
+  // }
 
   next()
 })
