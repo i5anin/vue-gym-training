@@ -1,156 +1,108 @@
 <template>
-  <div class="row">
-    <div class="col-12">
-      <ServerSideTable
-        datepicker
-        :headers="tableColumns"
-        :items="items"
-        :items-per-page-options="[15, 30, 50, 100]"
-        :items-per-page="itemsPerPage"
-        :current-page="currentPage"
-        :total-pages="totalPages"
-        :total-count="totalCount"
-        :sort-column="sortColumn"
-        :sort-item="sortItem"
-        @row-click="navigateToRow"
-        @page-change="updatePage"
-        @sort-change="updateSort"
-        @page-size-change="updatePageSize"
-        @search-change="updateSearch"
-        @date-range-change="updateDateRange"
-      />
+  <div class="container my-4">
+    <div v-for="(item, key) in trainings" :key="key" class="mb-5">
+      <div class="d-flex align-items-center gap-3 mb-3">
+        <img
+          v-if="getImageForType(item.type)"
+          :src="getImageForType(item.type)"
+          alt="img"
+          class="training-img rounded"
+        />
+        <h2 class="h4 mb-0">{{ item.type }}</h2>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-sm align-middle mb-3">
+          <thead>
+          <tr>
+            <th class="text-start">Номер</th>
+            <th class="text-start">Дата</th>
+            <th class="text-start">День недели</th>
+            <th class="text-start">Начало</th>
+            <th class="text-start">Окончание</th>
+            <th class="text-start">Всего</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>{{ key }}</td>
+            <td>{{ formatDate(item.startTime) }}</td>
+            <td class="text-capitalize">{{ formatDayOfWeek(item.startTime) }}</td>
+            <td>{{ formatTime(item.startTime) }}</td>
+            <td>{{ formatTime(item.endTime) }}</td>
+            <td>{{ calculateTotalTime(item.startTime, item.endTime) }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-sm align-middle">
+          <thead>
+          <tr>
+            <th class="text-start">Упражнения</th>
+            <th class="text-start">Подход&nbsp;1</th>
+            <th class="text-start">Подход&nbsp;2</th>
+            <th class="text-start">Подход&nbsp;3</th>
+            <th class="text-start">Подход&nbsp;4</th>
+            <th class="text-start">Подход&nbsp;5</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="(exercise, index) in item.exercises" :key="exercise.name">
+            <td>
+              <p class="mb-1">{{ index + 1 }}. {{ exercise.name }}</p>
+              <p class="text-secondary small mb-0">{{ exercise.description }}</p>
+            </td>
+            <td v-for="i in 5" :key="i">
+              <template v-if="exercise.sets[i - 1]">
+                {{ exercise.sets[i - 1].weight }}&nbsp;x&nbsp;{{ exercise.sets[i - 1].reps }}
+                <div class="text-secondary small">{{ exercise.sets[i - 1].note }}</div>
+              </template>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { getItems } from '@/pages/form-1/api/list.js'
-import ServerSideTable from '@/modules/shared/tables/table-server/PaginatedDataTable.vue'
-import { useRoleStore } from '@/modules/_main/store/index.js'
+import trainings from '@/data/trainings.json'
+import shouldersImg from '@/assets/shouldersImg.jpg'
+import chestImg from '@/assets/chestImg.jpg'
+import backImg from '@/assets/backImg.jpg'
 
-const props = defineProps({
-  type: { type: String, required: true },
-  route: { type: String, required: true },
-})
+const fmtDate = new Intl.DateTimeFormat('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })
+const fmtTime = new Intl.DateTimeFormat('ru-RU', { hour: '2-digit', minute: '2-digit', hour12: false })
+const fmtWeekday = new Intl.DateTimeFormat('ru-RU', { weekday: 'long' })
 
-const items = ref([])
-const tableFields = ref([])
-const totalCount = ref(0)
-const searchQuery = ref('')
-const currentPage = ref(1)
-const itemsPerPage = ref(15)
-const sortColumn = ref('')
-const sortItem = ref('')
+const formatDate = d => fmtDate.format(new Date(d))
+const formatTime = d => fmtTime.format(new Date(d))
+const formatDayOfWeek = d => fmtWeekday.format(new Date(d)).toLowerCase()
 
-const startDate = ref(null)
-const endDate = ref(null)
-
-const router = useRouter()
-const roleStore = useRoleStore()
-
-const totalPages = computed(() =>
-  Math.ceil(totalCount.value / itemsPerPage.value)
-)
-
-const tableColumns = computed(() =>
-  tableFields.value.map(field => ({
-    name: field.key,
-    title: field.title,
-    type: field.type,
-    sortable: true,
-    width: field.width,
-    update: field.update,
-  }))
-)
-
-const fetchItems = async () => {
-  try {
-    const response = await getItems({
-      page: currentPage.value,
-      limit: itemsPerPage.value,
-      search: searchQuery.value,
-      sortCol: sortColumn.value,
-      sortDir: sortItem.value,
-      date1: startDate.value,
-      date2: endDate.value,
-      type: props.type,
-      // module: roleStore.selectedRole,
-    })
-
-    if (response?.table) {
-      const fields = Object.entries(response.table.fields)
-        .filter(([_, field]) => field.permissions?.read) // Фильтруем только поля с read: true
-        .map(([key, field]) => ({
-          key,
-          ...field,
-        }))
-      tableFields.value = fields
-      items.value = response.table.data
-      totalCount.value = response.header.total_count
-    } else {
-      resetData()
-    }
-  } catch (error) {
-    console.error('Error fetching items:', error)
-    resetData()
-  }
+const calculateTotalTime = (startTime, endTime) => {
+  const start = new Date(startTime).getTime()
+  const end = new Date(endTime).getTime()
+  const totalMin = Math.max(0, Math.floor((end - start) / 60000))
+  const h = Math.floor(totalMin / 60)
+  const m = totalMin % 60
+  return `${h} ч ${m} мин`
 }
 
-const resetData = () => {
-  items.value = []
-  totalCount.value = 0
+const hasType = (itemType, type) => typeof itemType === 'string' && itemType.toLowerCase().includes(type)
+const getImageForType = type => {
+  if (hasType(type, 'плечи')) return shouldersImg
+  if (hasType(type, 'грудь')) return chestImg
+  if (hasType(type, 'спина')) return backImg
+  return ''
 }
-
-const navigateToRow = row => {
-  router.push({ name: props.route, params: { id: row.link_id } })
-}
-
-const updatePage = page => {
-  currentPage.value = page
-  fetchItems()
-}
-
-const updateSort = ({ column, item }) => {
-  sortColumn.value = column
-  sortItem.value = item
-  currentPage.value = 1
-  fetchItems()
-}
-
-const updatePageSize = size => {
-  itemsPerPage.value = size
-  currentPage.value = 1
-  fetchItems()
-}
-
-const updateSearch = query => {
-  searchQuery.value = query
-  currentPage.value = 1
-  fetchItems()
-}
-
-const updateDateRange = ({ startDate: newStart, endDate: newEnd }) => {
-  if (newStart) startDate.value = newStart
-  if (newEnd) endDate.value = newEnd
-  currentPage.value = 1
-  fetchItems()
-}
-
-onMounted(fetchItems)
 </script>
 
 <style scoped>
-.table tbody tr {
-  cursor: pointer;
-}
-
-th.sortable {
-  cursor: pointer;
-}
-
-th.sortable:hover {
-  background-color: #f1f1f1;
+.training-img {
+  height: 100px;
+  object-fit: cover;
 }
 </style>
