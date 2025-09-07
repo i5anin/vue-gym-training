@@ -1,6 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch, nextTick } from 'vue'
 import { createApi, type Product } from '/.vitepress/api'
+import hljs from 'highlight.js/lib/core'
+import json from 'highlight.js/lib/languages/json'
+import 'highlight.js/styles/github-dark.css'
+
+hljs.registerLanguage('json', json)
 
 const api = createApi()
 const product = ref<Product | null>(null)
@@ -20,12 +25,38 @@ async function loadProduct() {
     loading.value = false
   }
 }
+
+// подсветка при изменении данных
+watch(product, async () => {
+  await nextTick()
+  document.querySelectorAll('pre code').forEach(el => {
+    hljs.highlightElement(el as HTMLElement)
+  })
+})
 </script>
 
 <template>
   <div style="display:flex; gap:8px; align-items:center; margin-bottom:12px;">
-    <input v-model.number="productId" type="number" min="1" placeholder="ID" style="width:120px;" />
-    <button @click="loadProduct" :disabled="loading">Загрузить</button>
+    <input
+      v-model.number="productId"
+      type="number"
+      min="1"
+      placeholder="ID"
+      style="width:120px;"
+    />
+    <button
+      @click="loadProduct"
+      :disabled="loading"
+      style="
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color .2s;
+      "
+    >
+      {{ loading ? 'Загрузка…' : 'Загрузить' }}
+    </button>
   </div>
 
   <div v-if="loading">Загрузка…</div>
@@ -38,7 +69,6 @@ async function loadProduct() {
     <p style="white-space:pre-line">{{ product.description }}</p>
 
     <h3>JSON</h3>
-    <pre><code>{{ JSON.stringify(product, null, 2) }}</code></pre>
+    <pre><code class="json">{{ JSON.stringify(product, null, 2) }}</code></pre>
   </div>
 </template>
-

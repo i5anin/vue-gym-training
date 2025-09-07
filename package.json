@@ -36,6 +36,7 @@
     "date-fns": "^3.6.0",
     "dayjs": "^1.11.13",
     "eslint-plugin-import": "^2.31.0",
+    "highlight.js": "^11.11.1",
     "jquery": "^3.7.1",
     "lodash": "^4.17.21",
     "moment": "^2.30.1",
